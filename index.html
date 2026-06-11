@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Đa Giác Đều - Toán 9</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --secondary: #f39c12;
+            --bg: #fdfbfb;
+            --surface: #ffffff;
+            --text: #2c3e50;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            color: var(--text);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 25px;
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        /* Bảng điều hướng */
+        .q-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+        .q-nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ecf0f1;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .q-nav-btn:hover { background: #bdc3c7; }
+        .q-nav-btn.active { background: var(--secondary); color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4); }
+        .q-nav-btn.correct { background: #27ae60; color: white; }
+        .q-nav-btn.wrong { background: #e74c3c; color: white; }
+
+        /* Khung câu hỏi */
+        .question-box {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        /* Các lựa chọn */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .opt-btn {
+            padding: 15px 20px;
+            background: #fff;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #f9f0ff; }
+        .opt-btn:disabled { cursor: default; }
+
+        /* Giải thích */
+        .feedback {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 10px;
+            display: none;
+            line-height: 1.6;
+            animation: fadeIn 0.4s ease;
+            font-size: 1.05rem;
+        }
+        .feedback.success { background: #eafaf1; border-left: 5px solid #27ae60; color: #1e8449; }
+        .feedback.error { background: #fdedec; border-left: 5px solid #e74c3c; color: #c0392b; }
+        
+        .action-btns {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .btn-nav {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-nav:hover { opacity: 0.9; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🔷 TRẮC NGHIỆM ĐA GIÁC ĐỀU</h2>
+    
+    <div class="q-nav" id="navigation"></div>
+
+    <div id="quiz-area">
+        <div class="question-box" id="question-text"></div>
+        <div class="options-list" id="options"></div>
+        <div class="feedback" id="explanation"></div>
+        
+        <div class="action-btns">
+            <button class="btn-nav" onclick="changeQ(-1)">⬅️ Câu trước</button>
+            <button class="btn-nav" onclick="changeQ(1)">Câu sau ➡️</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const data = [
+        {
+            q: "Tổng số đo các góc của một đa giác đều có 7 cạnh là",
+            opts: ["A. \\(187^\\circ\\)", "B. \\(900^\\circ\\)", "C. \\(800^\\circ\\)", "D. \\(111^\\circ\\)"],
+            ans: 1,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Công thức tính tổng số đo các góc trong của đa giác \\(n\\) cạnh là: \\((n - 2) \\times 180^\\circ\\).<br>Với đa giác 7 cạnh (\\(n = 7\\)), ta có:<br>Tổng các góc = \\((7 - 2) \\times 180^\\circ = 5 \\times 180^\\circ = 900^\\circ\\)."
+        },
+        {
+            q: "Số đo mỗi góc của một bát giác đều là",
+            opts: ["A. \\(180^\\circ\\)", "B. \\(112^\\circ\\)", "C. \\(135^\\circ\\)", "D. \\(110^\\circ\\)"],
+            ans: 2,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Bát giác đều có 8 cạnh (\\(n = 8\\)).<br>Bước 1: Tính tổng các góc = \\((8 - 2) \\times 180^\\circ = 6 \\times 180^\\circ = 1080^\\circ\\).<br>Bước 2: Vì là đa giác <b>đều</b> nên 8 góc bằng nhau. Số đo mỗi góc là: \\(\\frac{1080^\\circ}{8} = 135^\\circ\\)."
+        },
+        {
+            q: "Một đa giác có tổng số đo các góc trong là \\(1440^\\circ\\). Hỏi đa giác đó có bao nhiêu cạnh?",
+            opts: ["A. 10", "B. 11", "C. 15", "D. 13"],
+            ans: 0,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Gọi số cạnh của đa giác là \\(n\\). Theo công thức ta có:<br>\\((n - 2) \\times 180^\\circ = 1440^\\circ\\)<br>\\(\\Rightarrow n - 2 = \\frac{1440}{180}\\)<br>\\(\\Rightarrow n - 2 = 8\\)<br>\\(\\Rightarrow n = 10\\).<br>Vậy đa giác đó có 10 cạnh."
+        },
+        {
+            q: "Số cạnh của một đa giác đều có mỗi góc trong \\(150^\\circ\\) là:",
+            opts: ["A. 18", "B. 12", "C. 10", "D. 11"],
+            ans: 1,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Gọi số cạnh là \\(n\\). Công thức tính 1 góc của đa giác đều là: \\(\\frac{(n-2) \\times 180^\\circ}{n}\\).<br>Ta có phương trình:<br>\\(\\frac{(n-2) \\times 180}{n} = 150\\)<br>\\(\\Rightarrow 180n - 360 = 150n\\)<br>\\(\\Rightarrow 180n - 150n = 360\\)<br>\\(\\Rightarrow 30n = 360 \\Rightarrow n = 12\\).<br>Vậy đa giác có 12 cạnh."
+        },
+        {
+            q: "Tổng số đo các góc trong của một đa giác có \\(n\\) cạnh được tính theo công thức nào?",
+            opts: ["A. \\(180(n-2)\\)", "B. \\(150(n - 2)\\)", "C. \\(100(n - 2)\\)", "D. 19"],
+            ans: 0,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Đây là định lý cơ bản trong SGK: Tổng số đo các góc trong của đa giác \\(n\\) cạnh là \\((n-2) \\times 180^\\circ\\)."
+        },
+        {
+            q: "Tam giác đều có bao nhiêu trục đối xứng?",
+            opts: ["A. 2", "B. 3", "C. 4", "D. 5"],
+            ans: 1,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Tam giác đều có <b>3</b> trục đối xứng. Đó chính là 3 đường thẳng đi qua đỉnh và vuông góc với cạnh đối diện (3 đường cao/trung tuyến/phân giác).<br><i>(Lưu ý: Đáp án A bôi đỏ trong ảnh gốc là bị lỗi đánh máy nhé các em!)</i>"
+        },
+        {
+            q: "Đa giác đều 9 cạnh có bao nhiêu trục đối xứng?",
+            opts: ["A. 3", "B. 6", "C. 9", "D. 18"],
+            ans: 2,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Ghi nhớ mẹo cực nhanh: <b>Đa giác đều có \\(n\\) cạnh thì sẽ có đúng \\(n\\) trục đối xứng.</b><br>Vậy đa giác đều 9 cạnh sẽ có 9 trục đối xứng."
+        },
+        {
+            q: "Đa giác đều 8 cạnh có bao nhiêu tâm đối xứng?",
+            opts: ["A. 1", "B. 2", "C. 4", "D. 8"],
+            ans: 0,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Ghi nhớ lý thuyết: <br>- Đa giác đều có số cạnh <b>chẵn</b> thì có <b>duy nhất 1</b> tâm đối xứng (đó là giao điểm của các đường chéo chính).<br>- Đa giác đều có số cạnh <b>lẻ</b> thì <b>không có</b> tâm đối xứng.<br>Vì 8 là số chẵn nên bát giác đều có 1 tâm đối xứng."
+        },
+        {
+            q: "Lục giác đều có bao nhiêu đường chéo chính?",
+            opts: ["A. 3", "B. 4", "C. 5", "D. 6"],
+            ans: 0,
+            exp: "<b>Hướng dẫn chi tiết:</b><br>Lục giác đều có 6 cạnh (số chẵn). <br>Số đường chéo chính của đa giác đều \\(n\\) cạnh (\\(n\\) chẵn) được tính bằng công thức: \\(\\frac{n}{2}\\).<br>Vậy lục giác đều có: \\(\\frac{6}{2} = 3\\) đường chéo chính."
+        }
+    ];
+
+    let current = 0;
+    let answers = new Array(data.length).fill(null);
+
+    function init() {
+        const nav = document.getElementById('navigation');
+        nav.innerHTML = data.map((_, i) => `<button class="q-nav-btn" id="btn${i}" onclick="jump(${i})">${i+1}</button>`).join('');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const q = data[current];
+        document.getElementById('question-text').innerHTML = `<b>Câu ${current + 1}:</b> ${q.q}`;
+        
+        const optsDiv = document.getElementById('options');
+        optsDiv.innerHTML = q.opts.map((opt, i) => 
+            `<button class="opt-btn" onclick="checkAnswer(${i})" ${answers[current] !== null ? 'disabled' : ''}>
+                ${opt}
+            </button>`
+        ).join('');
+
+        // Cập nhật giao diện bảng điều hướng
+        document.querySelectorAll('.q-nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn${current}`).classList.add('active');
+
+        // Hiển thị giải thích nếu đã trả lời
+        const expBox = document.getElementById('explanation');
+        if (answers[current] !== null) {
+            const isCorrect = answers[current];
+            expBox.style.display = 'block';
+            expBox.className = `feedback ${isCorrect ? 'success' : 'error'}`;
+            expBox.innerHTML = `<b>${isCorrect ? '🎉 Tuyệt vời! Em làm đúng rồi!' : '❌ Chưa chính xác! Hãy đọc kỹ giải thích nhé:'}</b><br><br>${q.exp}`;
+            
+            // Đổi màu nút đáp án đúng
+            const btns = optsDiv.querySelectorAll('.opt-btn');
+            btns[q.ans].style.borderColor = "#27ae60";
+            btns[q.ans].style.backgroundColor = "#eafaf1";
+            btns[q.ans].style.fontWeight = "bold";
+        } else {
+            expBox.style.display = 'none';
+        }
+
+        // Render lại công thức Toán
+        if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    function checkAnswer(optIndex) {
+        if (answers[current] !== null) return;
+        const isCorrect = optIndex === data[current].ans;
+        answers[current] = isCorrect;
+        
+        const navBtn = document.getElementById(`btn${current}`);
+        navBtn.classList.add(isCorrect ? 'correct' : 'wrong');
+        
+        loadQuestion();
+    }
+
+    function jump(index) {
+        current = index;
+        loadQuestion();
+    }
+
+    function changeQ(step) {
+        current = (current + step + data.length) % data.length;
+        loadQuestion();
+    }
+
+    init();
+</script>
+</body>
+</html>
